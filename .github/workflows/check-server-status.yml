@@ -1,82 +1,68 @@
 name: omniedge
 env:
-  server_ips: ${{ secrets.SERVER_IPS }}
-  server_port: ${{ secrets.PORT }}
-  server_porthk: ${{ secrets.PORTHK }}
-  api_url: ${{secrets.API_URL}}
-  api_port: ${{secrets.API_PORT}}
-  devapi_url: ${{secrets.DEVAPI_URL}}
-  devapi_port: ${{secrets.DEVAPI_PORT}}
+  tcpvalid: ${{ secrets.SERVER_TCP }}
+  udpvalid: ${{ secrets.SERVER_UDP }}
+  urlvalid: ${{ secrets.SERVER_URL }}
+  
 on:
-  push:
-    branches:
-      - main
   schedule:
-  - cron: "0 */5 * * *"
+  - cron: "*/${{ secrets.CRON_MIN_INTERVAL }} * * * *"
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-
-      - name: install network tools
-        run: |
-          sudo -E apt-get -y update
-          sudo -E apt-get install -y net-tools
-          sudo hostname omniedge-githubaction
-
-      - name: OmniEdge for Github Action
-        uses: omniedgeio/github-action@v1
-        with:
-          securitykey: ${{ secrets.OMNIEDGE_SECURITY_KEY }}
-          virtualnetworkid: ${{ secrets.OMNIEDGE_VIRTUALNETWORK_ID }}
           
-      - name: check server status
-        id: check-server-status
+      - name: check tcp server status
+        id: check-tcp-server-status
         run: |
           rm README.md && touch README.md
           echo "# Server Status" | tee -a README.md
-          echo "Check omniedge server status by OmniEdge for Github Action" | tee -a README.md
-          echo "> This README is generated every 5 hours by Github action." | tee -a README.md
+          echo "Check server status support tcp udp url" | tee -a README.md
+          echo "> This README is generated every ${{ secrets.CRON_MIN_INTERVAL }} minures by Github action." | tee -a README.md
           echo "## Last updated:" | tee -a README.md
           date | tee -a README.md
-          echo "## Public Supernode Status: " | tee -a README.md
-          echo "Public Supernode is only used for test only, for production please set up your own supernode, check [Customize Supernode](https://omniedge.io/docs/article/install/customize-supernode) to setup your own supernode: " | tee -a README.md
-          echo "|Location|Cloud Vendor|Specification|Version|**Status**|" |tee -a README.md
-          echo "|--|--|--|--|--|" |tee -a README.md
-          echo "${server_ips}" | while read name ip; 
+          echo "## TCP status: " | tee -a README.md
+          echo "|Domain/IP|Port|**Status**|" |tee -a README.md
+          echo "|--|--|--|" |tee -a README.md
+          echo "${tcpvalid}" | while read name port; 
           do
             name_output=$(echo $name | sed 's/,//g')
-            if [ "$name_output" = "Oregon" ]; then
-              nc -v -w 3 -u -z "$ip" ${server_port} &>/dev/null && echo "|$name_output|AWS|1vCPUs / 0.5 GB RAM|	2.6-stable-omni|Online :white_check_mark:|" || echo "|Southeast Asia|AWS|2vCPUs / 1GB RAM|	2.6-stable-omni| Offline ! :x:|" 
-              sleep 1
-            else
-              nc -v -w 3 -u -z "$ip" ${server_port} &>/dev/null && echo "|<del>$name_output</del>|<del>AWS</del>|<del>1vCPU</del> / <del>0.5 GB RAM</del>|<del>	2.6-stable-omni</del>|<del>Online</del>|" || echo "|$name_output|AWS|1vCPU / 0.5GB RAM|	2.6-stable-omni| Offline ! :x:|"
-              sleep 1
-            fi
+            nc -v -w 3 -z $name $port &>/dev/null && echo "|$name_output|$port|Online :white_check_mark:|" || echo "|$name_output|$port| Offline ! :x:|" 
+            sleep 1
           done | tee -a README.md
-        
-          echo ::set-output name=server-status::$(cat README.md)
           
-      - name: check API status
-        id: check-API-status
+      - name: check udp server status
+        id: check-udp-server-status
         run: |
-          echo "## API status: " | tee -a README.md
-          nc -v -w 3 -u -z ${api_url} ${api_port} &>/dev/null && echo " - Prod API is Online  ! :white_check_mark:" | tee -a README.md || echo " - Prod API is Offline ! :x:" | tee -a README.md
-          nc -v -w 3 -u -z ${devapi_url} ${devapi_port} &>/dev/null && echo " - Dev API is Online  ! :white_check_mark:" | tee -a README.md || echo " - Dev API is Offline ! :x:" | tee -a README.md  
-
+          echo "## UDP status: " | tee -a README.md
+          echo "|Domain/IP|Port|**Status**|" |tee -a README.md
+          echo "|--|--|--|" |tee -a README.md
+          echo "${udpvalid}" | while read name port; 
+          do
+            name_output=$(echo $name | sed 's/,//g')
+            nc -v -w 3 -z $name $port &>/dev/null && echo "|$name_output|$port|Online :white_check_mark:|" || echo "|$name_output|$port| Offline ! :x:|" 
+            sleep 1
+          done | tee -a README.md
+          
       - name: check website status
         id: check-website-status
         run: |
           echo "## website status: " | tee -a README.md
-          status=$(curl -sI  https://omniedge.io | head -1 | awk '{print $2}'); [ $status -eq 200 ] && echo " - omniedge.io is Online ! :white_check_mark:" | tee -a README.md || echo "- omniedge.io is Offline ! :x:" tee -a README.md     
-      
-
+          echo "|Domain/IP|Code|**Status**|" |tee -a README.md
+          echo "|--|--|--|" |tee -a README.md
+          echo "${urlvalid}" | while read name code;
+          do
+            name_output=$(echo $name | sed 's/,//g')
+            status=$(curl -sI $name | head -1 | awk '{print $2}'); [ $status -eq $code ] && echo "|$name_output|$port|Online :white_check_mark:|" || echo "|$name_output|$port| Offline ! :x:|"
+            sleep 1
+          done | tee -a README.md
+          
       - name: Commit files
         run: |
-          git config --local user.email "github-actions@omniedge.io"
-          git config --local user.name "github-actions"
+          git config --local user.email "306852160@qq.com"
+          git config --local user.name "cj"
           git commit -m "Update server status" -a
       - name: Push changes
         uses: ad-m/github-push-action@master
