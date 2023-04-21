@@ -68,7 +68,5 @@ jobs:
           git config --local user.email "306852160@qq.com"
           git config --local user.name "cj"
           git commit -m "Update server status" -a
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git push
+      
