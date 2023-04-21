@@ -1,4 +1,4 @@
-name: omniedge
+name: serverstatus
 env:
   tcpvalid: ${{ secrets.SERVER_TCP }}
   udpvalid: ${{ secrets.SERVER_UDP }}
