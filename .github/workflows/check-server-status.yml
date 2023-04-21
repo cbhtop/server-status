@@ -26,6 +26,7 @@ jobs:
           echo "## TCP status: " | tee -a README.md
           echo "|Domain/IP|Port|**Status**|" |tee -a README.md
           echo "|--|--|--|" |tee -a README.md
+          echo "tcpvalid: ${tcpvalid}"
           echo "${tcpvalid}" | while read name port; 
           do
             name_output=$(echo $name | sed 's/,//g')
@@ -39,6 +40,7 @@ jobs:
           echo "## UDP status: " | tee -a README.md
           echo "|Domain/IP|Port|**Status**|" |tee -a README.md
           echo "|--|--|--|" |tee -a README.md
+          echo "udpvalid: ${udpvalid}"
           echo "${udpvalid}" | while read name port; 
           do
             name_output=$(echo $name | sed 's/,//g')
@@ -52,6 +54,7 @@ jobs:
           echo "## website status: " | tee -a README.md
           echo "|Domain/IP|Code|**Status**|" |tee -a README.md
           echo "|--|--|--|" |tee -a README.md
+          echo "urlvalid: ${urlvalid}"
           echo "${urlvalid}" | while read name code;
           do
             name_output=$(echo $name | sed 's/,//g')
