@@ -28,9 +28,9 @@ jobs:
           echo "SERVER_TCP: ${{ vars.SERVER_TCP }}"
           echo "${{ vars.SERVER_TCP }}" | while read name port; 
           do
-            name_output=$(echo $name | sed 's/,//g')
+            port_output=$(echo $port | sed 's/\n//g')
             echo "name port:$name $port|"
-            nc -v -w 3 -z $name $port &>/dev/null && echo "|$name_output|$port|Online :white_check_mark:|" || echo "|$name_output|$port| Offline ! :x:|" 
+            nc -v -w 3 -z $name $port_output &>/dev/null && echo "|$name|$port_output|Online :white_check_mark:|" || echo "|$name|$port_output| Offline ! :x:|" 
             sleep 1
           done | tee -a README.md
           
@@ -43,8 +43,8 @@ jobs:
           echo "SERVER_UDP: ${{ vars.SERVER_UDP }}"
           echo "${{ vars.SERVER_UDP }}" | while read name port; 
           do
-            name_output=$(echo $name | sed 's/,//g')
-            nc -v -w 3 -u -z $name $port &>/dev/null && echo "|$name_output|$port|Online :white_check_mark:|" || echo "|$name_output|$port| Offline ! :x:|" 
+            port_output=$(echo $port | sed 's/\n//g')
+            nc -v -w 3 -u -z $name $port_output &>/dev/null && echo "|$name|$port_output|Online :white_check_mark:|" || echo "|$name|$port_output| Offline ! :x:|" 
             sleep 1
           done | tee -a README.md
           
@@ -57,8 +57,8 @@ jobs:
           echo "SERVER_URL: ${{ vars.SERVER_URL }}"
           echo "${{ vars.SERVER_URL }}" | while read name code;
           do
-            name_output=$(echo $name | sed 's/,//g')
-            status=$(curl -sI $name | head -1 | awk '{print $2}'); [ $status -eq $code ] && echo "|$name_output|$port|Online :white_check_mark:|" || echo "|$name_output|$code| Offline ! :x:|"
+            code_output=$(echo $code | sed 's/,//g')
+            status=$(curl -sI $name | head -1 | awk '{print $2}'); [ $status -eq $code_output ] && echo "|$name|$code_output|Online :white_check_mark:|" || echo "|$name|$code_output| Offline ! :x:|"
             sleep 1
           done | tee -a README.md
           
