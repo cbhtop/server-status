@@ -6,7 +6,7 @@ env:
   
 on:
   schedule:
-  - cron: "*/9 * * * *"
+  - cron: "*/${{ secrets.CRON_MIN_INTERVAL }} * * * *"
   workflow_dispatch:
 jobs:
   build:
