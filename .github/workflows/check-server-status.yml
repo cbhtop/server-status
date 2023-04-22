@@ -43,7 +43,7 @@ jobs:
           echo "$SERVER_UDP" | while read name port; 
           do
             name_output=$(echo $name | sed 's/,//g')
-            nc -v -w 3 -z $name $port &>/dev/null && echo "|$name_output|$port|Online :white_check_mark:|" || echo "|$name_output|$port| Offline ! :x:|" 
+            nc -v -w 3 -u -z $name $port &>/dev/null && echo "|$name_output|$port|Online :white_check_mark:|" || echo "|$name_output|$port| Offline ! :x:|" 
             sleep 1
           done | tee -a README.md
           
@@ -57,7 +57,7 @@ jobs:
           echo "$SERVER_URL" | while read name code;
           do
             name_output=$(echo $name | sed 's/,//g')
-            status=$(curl -sI $name | head -1 | awk '{print $2}'); [ $status -eq $code ] && echo "|$name_output|$port|Online :white_check_mark:|" || echo "|$name_output|$port| Offline ! :x:|"
+            status=$(curl -sI $name | head -1 | awk '{print $2}'); [ $status -eq $code ] && echo "|$name_output|$port|Online :white_check_mark:|" || echo "|$name_output|$code| Offline ! :x:|"
             sleep 1
           done | tee -a README.md
           
