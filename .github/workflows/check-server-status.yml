@@ -29,6 +29,7 @@ jobs:
           echo "${{ vars.SERVER_TCP }}" | while read name port; 
           do
             name_output=$(echo $name | sed 's/,//g')
+            echo "name port:$name $port"
             nc -v -w 3 -z $name $port &>/dev/null && echo "|$name_output|$port|Online :white_check_mark:|" || echo "|$name_output|$port| Offline ! :x:|" 
             sleep 1
           done | tee -a README.md
