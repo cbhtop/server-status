@@ -1,9 +1,5 @@
 name: serverstatus
-env:
-  tcpvalid: ${{ secrets.SERVER_TCP }}
-  udpvalid: ${{ secrets.SERVER_UDP }}
-  urlvalid: ${{ secrets.SERVER_URL }}
-  
+
 on:
   schedule:
   - cron: "*/5 * * * *"
