@@ -28,7 +28,7 @@ jobs:
           echo "SERVER_TCP: ${{ vars.SERVER_TCP }}"
           echo "${{ vars.SERVER_TCP }}" | while read name port; 
           do
-            port_output=$(echo $port | sed 's/\r\n//g')
+            port_output=$(echo $port | sed 's/\r//g')
             echo "name port:$name $port|"
             nc -v -w 3 -z $name $port_output &>/dev/null && echo "|$name|$port_output|Online :white_check_mark:|" || echo "|$name|$port_output| Offline ! :x:|" 
             sleep 1
