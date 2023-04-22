@@ -25,8 +25,8 @@ jobs:
           echo "## TCP status: " | tee -a README.md
           echo "|Domain/IP|Port|**Status**|" |tee -a README.md
           echo "|--|--|--|" |tee -a README.md
-          echo "SERVER_TCP: $SERVER_TCP"
-          echo "$SERVER_TCP" | while read name port; 
+          echo "SERVER_TCP: ${{ vars.SERVER_TCP }}"
+          echo "${{ vars.SERVER_TCP }}" | while read name port; 
           do
             name_output=$(echo $name | sed 's/,//g')
             nc -v -w 3 -z $name $port &>/dev/null && echo "|$name_output|$port|Online :white_check_mark:|" || echo "|$name_output|$port| Offline ! :x:|" 
@@ -39,8 +39,8 @@ jobs:
           echo "## UDP status: " | tee -a README.md
           echo "|Domain/IP|Port|**Status**|" |tee -a README.md
           echo "|--|--|--|" |tee -a README.md
-          echo "SERVER_UDP: $SERVER_UDP"
-          echo "$SERVER_UDP" | while read name port; 
+          echo "SERVER_UDP: ${{ vars.SERVER_UDP }}"
+          echo "${{ vars.SERVER_UDP }}" | while read name port; 
           do
             name_output=$(echo $name | sed 's/,//g')
             nc -v -w 3 -u -z $name $port &>/dev/null && echo "|$name_output|$port|Online :white_check_mark:|" || echo "|$name_output|$port| Offline ! :x:|" 
@@ -53,8 +53,8 @@ jobs:
           echo "## website status: " | tee -a README.md
           echo "|Domain/IP|Code|**Status**|" |tee -a README.md
           echo "|--|--|--|" |tee -a README.md
-          echo "SERVER_URL: $SERVER_URL"
-          echo "$SERVER_URL" | while read name code;
+          echo "SERVER_URL: ${{ vars.SERVER_URL }}"
+          echo "${{ vars.SERVER_URL }}" | while read name code;
           do
             name_output=$(echo $name | sed 's/,//g')
             status=$(curl -sI $name | head -1 | awk '{print $2}'); [ $status -eq $code ] && echo "|$name_output|$port|Online :white_check_mark:|" || echo "|$name_output|$code| Offline ! :x:|"
