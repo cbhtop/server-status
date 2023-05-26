@@ -2,13 +2,13 @@
 Check server status support tcp udp url
 > This README is generated every 5 minures by Github action.
 ## Last updated:
-Fri May 26 23:22:17 UTC 2023
+Fri May 26 23:34:27 UTC 2023
 ## TCP status: 
 |Domain/IP|Port|**Status**|
 |--|--|--|
 |y2.honor.tk|9443|Online :white_check_mark:|
 |y1.honor.tk|9443|Online :white_check_mark:|
-|arm1.honor.tk|9443| Offline ! :x:|
+|arm1.honor.tk|9443|Online :white_check_mark:|
 |arm2.honor.tk|9443|Online :white_check_mark:|
 |x1.honor.tk|9443|Online :white_check_mark:|
 |x2.honor.tk|9443|Online :white_check_mark:|
