@@ -2,7 +2,7 @@
 Check server status support tcp udp url
 > This README is generated every 5 minures by Github action.
 ## Last updated:
-Sat Feb 15 18:48:10 UTC 2025
+Sat Feb 15 19:00:27 UTC 2025
 ## TCP status: 
 |Domain/IP|Port|**Status**|
 |--|--|--|
