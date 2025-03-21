@@ -2,7 +2,7 @@
 Check server status support tcp udp url
 > This README is generated every 5 minures by Github action.
 ## Last updated:
-Fri Mar 21 16:25:52 UTC 2025
+Fri Mar 21 16:47:36 UTC 2025
 ## TCP status: 
 |Domain/IP|Port|**Status**|
 |--|--|--|
@@ -22,7 +22,7 @@ Fri Mar 21 16:25:52 UTC 2025
 ## website status: 
 |Domain/IP|Code|**Status**|
 |--|--|--|
-|https://www.winway.com.cn/|200|Online :white_check_mark:|
+|https://www.winway.com.cn/|200| Offline ! :x:|
 |https://docker.winway.com.cn/|200|Online :white_check_mark:|
 |https://test.winway.com.cn/|200| Offline ! :x:|
 |https://odoo10.honor.tk/|200| Offline ! :x:|
